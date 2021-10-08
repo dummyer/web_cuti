@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\CutiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,4 +18,6 @@ use App\Http\Controllers\HomeController;
 Route::group(['middleware' => ['web']], function () {
 	Route::get('/', [HomeController::class, 'index']);
 	Route::get('/home', [HomeController::class, 'index']);
+	
+	Route::get('/kalender_cuti', [CutiController::class, 'kalender_cuti']);
 });

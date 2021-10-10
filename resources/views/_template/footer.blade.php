@@ -22,4 +22,6 @@
 <script src="<?php echo url('/'); ?>/assets/plugins/jquery-ui/jquery-ui.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<?php echo url('/'); ?>/assets/js/adminlte.min.js"></script>
+<!-- SWEETALERT2 2.11-->
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Page specific script -->

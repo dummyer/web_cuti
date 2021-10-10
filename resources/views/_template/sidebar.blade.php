@@ -21,26 +21,30 @@
               </p>
             </a>
           </li>
-          <li class="nav-header">Data HR</li>
-          <li class="nav-item">
-            <a href="<?php echo url('/'); ?>/kalender_cuti" class="nav-link <?php if(Request::segment(1) == 'kalender_cuti'){ echo "active"; } ?>">
-              <i class="nav-icon far fa-calendar-alt"></i>
-              <p>
-                Kalender Cuti
-               
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="../gallery.html" class="nav-link">
-              <i class="nav-icon fas fa-mail-bulk"></i>
-              <p>
-                Permintaan Cuti
-				 <span class="badge badge-info right">2</span>
-              </p>
-            </a>
-          </li>
-        
+		  @if($getOneUser[0]['role'] == 1)
+			  <li class="nav-header">Data HR</li>
+			  <li class="nav-item">
+				<a href="<?php echo url('/'); ?>/kalender_cuti" class="nav-link <?php if(Request::segment(1) == 'kalender_cuti'){ echo "active"; } ?>">
+				  <i class="nav-icon far fa-calendar-alt"></i>
+				  <p>
+					Kalender Cuti
+				   
+				  </p>
+				</a>
+			  </li>
+			  <li class="nav-item">
+				<a href="<?php echo url('/'); ?>/permintaan_cuti" class="nav-link <?php if(Request::segment(1) == 'permintaan_cuti'){ echo "active"; } ?>">
+				  <i class="nav-icon fas fa-mail-bulk"></i>
+				  <p>
+					Permintaan Cuti
+					@if(isset($count_pending_cuti) && $count_pending_cuti > 0)
+						<span class="badge badge-danger right"><?php echo $count_pending_cuti;?></span>
+					@endif
+					 
+				  </p>
+				</a>
+			  </li>
+			@endif
         
          
           

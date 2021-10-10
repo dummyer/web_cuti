@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CutiController;
+use App\Http\Controllers\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,7 +18,18 @@ use App\Http\Controllers\CutiController;
 
 Route::group(['middleware' => ['web']], function () {
 	Route::get('/', [HomeController::class, 'index']);
+	Route::get('/login', [LoginController::class, 'login']);
+	Route::get('/logout', [LoginController::class, 'logout']);
+	Route::get('/login/authLogin', [LoginController::class, 'authLogin']);
 	Route::get('/home', [HomeController::class, 'index']);
 	
 	Route::get('/kalender_cuti', [CutiController::class, 'kalender_cuti']);
+	Route::get('/permintaan_cuti', [CutiController::class, 'permintaan_cuti']);
+	Route::get('/permintaan_cuti/updateCuti', [CutiController::class, 'updateCuti']);
+	
+	//show
+	Route::get('/showAll_cutiRequest_pending', [CutiController::class, 'showAll_cutiRequest_pending']);
+	Route::get('/showAll_cutiRequest_approved', [CutiController::class, 'showAll_cutiRequest_approved']);
+	Route::get('/countCutiRequest_pending', [CutiController::class, 'countCutiRequest_pending']);
+	Route::get('/showCalender', [CutiController::class, 'showCalender']);
 });

@@ -9,10 +9,21 @@ use Redirect;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Routing\UrlGenerator;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
     function index(){
-		return view('home/home');
+		$getOneUser = $this->getOneUser();
+		return view('home/home')->with('getOneUser', $getOneUser);
+	}
+	function getOneUser(){
+		$one_user = DB::select("SELECT * FROM user where nik_user='".Session::get('nik_user')."'");
+		$result = json_decode(json_encode($one_user), true);
+		if(count($result) > 0){
+			return $result;
+		}else{
+			return redirect('login');
+		}
 	}
 }

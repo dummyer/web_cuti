@@ -31,9 +31,14 @@
     <section class="content">
       <div class="container-fluid">
         <div class="row">
-          <div class="col-md-4">
+			<div class="col">
+				<h4>Kalender Cuti</h4>
+			</div>
+		</div>
+        <div class="row">
+          <div class="col-md">
             <div class="sticky-top mb-3">
-              <div class="card">
+              <div class="card" style="display:none">
                
                 <div class="card-body">
                   <!-- the events -->
@@ -47,7 +52,7 @@
             </div>
           </div>
           <!-- /.col -->
-          <div class="col-md-8 text-center">
+          <div class="col-md-12 text-left">
             <div class="card card-primary">
               <div class="card-body p-0">
                 <!-- THE CALENDAR -->
@@ -134,7 +139,8 @@
         };
       }
     });
-
+	
+    var all_cuti_approved = <?php echo json_encode($showCalender); ?>;
     var calendar = new Calendar(calendarEl, {
       headerToolbar: {
         left  : 'prev,next today',
@@ -142,7 +148,9 @@
         right : 'dayGridMonth,timeGridWeek,timeGridDay'
       },
       themeSystem: 'bootstrap',
+	  events : all_cuti_approved,
       //Random default events
+	  /*
       events: [
         {
           title          : 'All Day Event',
@@ -190,6 +198,9 @@
           borderColor    : '#3c8dbc' //Primary (light-blue)
         }
       ],
+	  */
+	  
+	  
      // editable  : true,
      // droppable : true, // this allows things to be dropped onto the calendar !!!
       drop      : function(info) {

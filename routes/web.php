@@ -25,6 +25,7 @@ Route::group(['middleware' => ['web']], function () {
 	
 	Route::get('/kalender_cuti', [CutiController::class, 'kalender_cuti']);
 	Route::get('/permintaan_cuti', [CutiController::class, 'permintaan_cuti']);
+	Route::get('/request_cuti', [CutiController::class, 'request_cuti']);
 	Route::get('/permintaan_cuti/updateCuti', [CutiController::class, 'updateCuti']);
 	
 	//show

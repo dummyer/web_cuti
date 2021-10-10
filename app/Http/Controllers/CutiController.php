@@ -47,6 +47,21 @@ class CutiController extends Controller
 		}
 	}
 	
+    function request_cuti(){
+		if(!Session::get('nik_user')){
+            return redirect('login');
+        }
+		else{
+			$getOneUser = $this->getOneUser();
+			if($getOneUser[0]['role'] == 1){ //HR
+				$count_pending_cuti = $this->countCutiRequest_pending();
+				return view('request_cuti/request_cuti')->with('getOneUser', $getOneUser)->with('count_pending_cuti', $count_pending_cuti);
+			}else{
+				abort(404);
+			}
+		}
+	}
+	
 	function showAll_cutiRequest_pending(){
 		$all_cuti = DB::select('SELECT c.id_cuti, c.type_cuti, t.nama_type_cuti, c.desc_cuti, c.tgl_mulai_cuti, c.jumlah_hari_cuti, ue.nama_user, ue.nik_user, ue.department, c.requested_date, s.judul_status, c.hr_nik_approve FROM list_cuti c 
 									INNER JOIN user ue ON c.user_cuti=ue.nik_user 

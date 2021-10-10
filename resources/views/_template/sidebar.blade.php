@@ -47,10 +47,10 @@
 			@endif
         <li class="nav-header">User</li>
 			  <li class="nav-item">
-				<a href="<?php echo url('/'); ?>/kalender_cuti" class="nav-link <?php if(Request::segment(1) == 'kalender_cuti'){ echo "active"; } ?>">
-				  <i class="nav-icon far fa-calendar-alt"></i>
+				<a href="<?php echo url('/'); ?>/request_cuti" class="nav-link <?php if(Request::segment(1) == 'request_cuti'){ echo "active"; } ?>">
+				  <i class="nav-icon fas fa-pencil-alt"></i>
 				  <p>
-					Kalender Cuti
+					Request Cuti
 				   
 				  </p>
 				</a>

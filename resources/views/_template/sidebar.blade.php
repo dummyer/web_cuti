@@ -22,7 +22,7 @@
             </a>
           </li>
 		  @if($getOneUser[0]['role'] == 1)
-			  <li class="nav-header">Data HR</li>
+			  <li class="nav-header">HR</li>
 			  <li class="nav-item">
 				<a href="<?php echo url('/'); ?>/kalender_cuti" class="nav-link <?php if(Request::segment(1) == 'kalender_cuti'){ echo "active"; } ?>">
 				  <i class="nav-icon far fa-calendar-alt"></i>
@@ -41,6 +41,15 @@
 						<span class="badge badge-danger right"><?php echo $count_pending_cuti;?></span>
 					@endif
 					 
+				  </p>
+				</a>
+			  </li>
+			  <hr style="border: 1px solid grey;width:90%;opacity:0.5">
+			  <li class="nav-item">
+				<a href="<?php echo url('/'); ?>/create_cuti_hr" class="nav-link <?php if(Request::segment(1) == 'create_cuti_hr'){ echo "active"; } ?>">
+				  <i class="nav-icon fas fa-plus-circle"></i>
+				  <p>
+					Create Cuti
 				  </p>
 				</a>
 			  </li>

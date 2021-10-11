@@ -237,7 +237,7 @@ class CutiController extends Controller
 	}
 	
 	function getReqCuti_OneUser(){
-		$one_user = DB::select("SELECT c.*, t.id_type_cuti FROM list_cuti c INNER JOIN type_cuti t ON t.id_type_cuti = c.type_cuti where c.user_cuti='".Session::get('nik_user')."' order by c.requested_date ASC");
+		$one_user = DB::select("SELECT c.*, t.nama_type_cuti FROM list_cuti c INNER JOIN type_cuti t ON t.id_type_cuti = c.type_cuti where c.user_cuti='".Session::get('nik_user')."' order by c.requested_date ASC");
 		$result = json_decode(json_encode($one_user), true);
 		return $result;
 	}

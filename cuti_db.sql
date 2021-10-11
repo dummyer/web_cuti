@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 10, 2021 at 01:31 PM
+-- Generation Time: Oct 11, 2021 at 05:05 PM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 8.0.0
 
@@ -31,6 +31,7 @@ CREATE TABLE `list_cuti` (
   `id_cuti` int(11) NOT NULL,
   `type_cuti` int(11) NOT NULL,
   `desc_cuti` longtext NOT NULL,
+  `attachment` varchar(100) DEFAULT NULL,
   `tgl_mulai_cuti` date NOT NULL,
   `jumlah_hari_cuti` int(11) NOT NULL,
   `user_cuti` int(11) NOT NULL,
@@ -43,9 +44,12 @@ CREATE TABLE `list_cuti` (
 -- Dumping data for table `list_cuti`
 --
 
-INSERT INTO `list_cuti` (`id_cuti`, `type_cuti`, `desc_cuti`, `tgl_mulai_cuti`, `jumlah_hari_cuti`, `user_cuti`, `requested_date`, `status`, `hr_nik_approve`) VALUES
-(2, 1, 'Cuti tahunan dari tanggal 10 oktober 2021 hingga 13 oktober 2021', '2021-10-11', 4, 1902, '2021-10-01 12:01:05', 1, NULL),
-(3, 2, 'Cuti sakit', '2021-10-13', 2, 1903, '2021-10-13 12:01:05', 3, NULL);
+INSERT INTO `list_cuti` (`id_cuti`, `type_cuti`, `desc_cuti`, `attachment`, `tgl_mulai_cuti`, `jumlah_hari_cuti`, `user_cuti`, `requested_date`, `status`, `hr_nik_approve`) VALUES
+(2, 1, 'Cuti tahunan dari tanggal 10 oktober 2021 hingga 13 oktober 2021', '', '2021-10-11', 4, 1902, '2021-10-01 12:01:05', 1, 1901),
+(3, 2, 'Cuti sakit', '', '2021-10-13', 2, 1903, '2021-10-13 12:01:05', 1, 1901),
+(13, 1, 'cuti tahunan', NULL, '2021-10-11', 4, 1901, '2021-10-11 14:25:17', 2, NULL),
+(14, 1, '', NULL, '2021-10-16', 3, 1902, '2021-10-11 14:32:45', 1, 1901),
+(15, 1, '', NULL, '2021-10-16', 7, 1902, '2021-10-11 14:34:52', 2, NULL);
 
 -- --------------------------------------------------------
 
@@ -223,7 +227,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `list_cuti`
 --
 ALTER TABLE `list_cuti`
-  MODIFY `id_cuti` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_cuti` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `notification`

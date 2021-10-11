@@ -53,14 +53,11 @@ class CutiController extends Controller
         }
 		else{
 			$getOneUser = $this->getOneUser();
-			if($getOneUser[0]['role'] == 1){ //HR
 				$getKategoriCuti = $this->getKategoriCuti();
 				$count_pending_cuti = $this->countCutiRequest_pending();
 				$getReqCuti_OneUser = $this->getReqCuti_OneUser();
 				return view('request_cuti/request_cuti')->with('getOneUser', $getOneUser)->with('getKategoriCuti', $getKategoriCuti)->with('count_pending_cuti', $count_pending_cuti)->with('getReqCuti_OneUser', $getReqCuti_OneUser);
-			}else{
-				abort(404);
-			}
+			
 		}
 	}
 	
@@ -97,37 +94,35 @@ class CutiController extends Controller
 	
 	function updateCuti(){
 		//return $_REQUEST;
+		$getOneUser = $this->getOneUser();
 		$all_cuti = DB::select('SELECT * from list_cuti where id_cuti ='.$_GET['id_cuti']);
 		$getOneCuti = json_decode(json_encode($all_cuti), true);
-		$getOneUser = $this->getOneUser();
-		//return $getOneCuti;
-		if(isset($_GET['action']) && $_GET['action'] == "approve"){
-			if(isset($getOneCuti[0]['jumlah_hari_cuti']) && $getOneCuti[0]['jumlah_hari_cuti'] <= $getOneUser[0]['jata_cuti']){
-				$sisa_cuti = $getOneUser[0]['jata_cuti'] - $getOneCuti[0]['jumlah_hari_cuti'];
-				//return $sisa_cuti;
-				$up_jataCuti = DB::update("UPDATE user SET jata_cuti = '".$sisa_cuti."' WHERE nik_user='".$getOneUser[0]['nik_user']."'");
-				$resultUpCuti = json_decode(json_encode($up_jataCuti), true);
-				if($resultUpCuti == 1){
+		if(count($getOneCuti) > 0 && $getOneCuti[0]['user_cuti'] != Session::get('nik_user')){
+			if(isset($_GET['action']) && $_GET['action'] == "approve"){
+				$get_cuti_this_month = DB::select("SELECT user_cuti, sum(jumlah_hari_cuti) as total_cuti from list_cuti where MONTH(tgl_mulai_cuti) = MONTH(CURRENT_DATE())
+													AND YEAR(tgl_mulai_cuti) = YEAR(CURRENT_DATE()) AND status = 1 AND user_cuti='".$getOneCuti[0]['user_cuti']."' GROUP BY user_cuti");
+				$cutiThisMonth = json_decode(json_encode($get_cuti_this_month), true);
+					//return $getOneCuti[0]['user_cuti'];
+				if(count($cutiThisMonth) > 0 &&((int)$cutiThisMonth[0]['total_cuti']+(int)$getOneCuti[0]['jumlah_hari_cuti']) <= 12){
 					$all_cuti = DB::update("UPDATE list_cuti SET status = '1', hr_nik_approve = '".Session::get('nik_user')."' WHERE list_cuti.id_cuti = ".$_GET['id_cuti']);
 					$result = json_decode(json_encode($all_cuti), true);
 					return $result;
 				}else{
-					return $resultUpCuti;
+					return 3;
 				}
-				
-			}else{
-				return 3;
 			}
-			
+			else if(isset($_GET['action']) && $_GET['action'] == "reject"){
+				$all_cuti = DB::update("UPDATE list_cuti SET status = '3', hr_nik_approve = '".Session::get('nik_user')."' WHERE list_cuti.id_cuti = ".$_GET['id_cuti']);
+				$result = json_decode(json_encode($all_cuti), true);
+				return $result;
+			}
+			else{
+				return 0;
+			}
+		}else{
+			return 4;
 		}
-		else if(isset($_GET['action']) && $_GET['action'] == "reject"){
-			$all_cuti = DB::update("UPDATE list_cuti SET status = '3', hr_nik_approve = '".Session::get('nik_user')."' WHERE list_cuti.id_cuti = ".$_GET['id_cuti']);
-			$result = json_decode(json_encode($all_cuti), true);
-			return $result;
-		}
-		else{
-			return 0;
-		}
+		
 	}
 	
 	function statusCutiColor($status){

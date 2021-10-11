@@ -1,6 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 @include('_template/header')
+<style>
+.timelines {
+  overflow-x: hidden;
+  padding: 20px 0;
+}
+
+.timelines ol {
+  width: 100%;
+  transition: all 1s;
+  margin:0;
+  padding:0;
+  display:flex;
+  justify-content: space-between;
+}
+
+.timelines ol li {
+  list-style:none;
+  position: relative;
+  text-align:center;
+  flex-grow: 1;
+  flex-basis: 0;
+  padding: 0 5px;
+}
+
+.timelines ol li.dotgreen:before  {
+  content:"";
+  width:10px;
+  height:10px;
+  display:block;
+  border-radius:50%;
+  background: green;
+  margin:0 auto 5px auto;
+}
+
+.timelines ol li.dotred:before  {
+  content:"";
+  width:10px;
+  height:10px;
+  display:block;
+  border-radius:50%;
+  background: red;
+  margin:0 auto 5px auto;
+}
+
+.timelines ol li.dotgrey:before  {
+  content:"";
+  width:10px;
+  height:10px;
+  display:block;
+  border-radius:50%;
+  background: #ccc;
+  margin:0 auto 5px auto;
+}
+
+.timelines ol li.dotyellow:before  {
+  content:"";
+  width:10px;
+  height:10px;
+  display:block;
+  border-radius:50%;
+  background: orange;
+  margin:0 auto 5px auto;
+}
+
+.timelines ol li:not(:last-child)::after {
+    content: "";
+    width: calc(100% - 14px);
+    height: 2px;
+    display: block;
+    background: #ccc;
+    margin: 0;
+    position: absolute;
+    top: 4px;
+    left: calc(50% + 7px);
+}
+
+</style>
 <body class="hold-transition sidebar-mini layout-navbar-fixed layout-fixed layout-footer-fixed">
 <div class="wrapper">
   <!-- Navbar -->
@@ -64,13 +141,13 @@
 								<td style="width:1%">:</td>
 								<td>
 									<div class="row">
-										<div class="col">
+										<div class="col col-sm-5">
 											<input type="date" class="form-control" name="first_date" min="<?php echo Date('Y-m-d'); ?>" required />
 										</div>
-										<div class="col col-sm-1 text-center">
+										<div class="col col-sm-2 text-center">
 											<i class="fas fa-angle-double-right"></i>
 										</div>
-										<div class="col">
+										<div class="col col-sm-5">
 											<input type="date" class="form-control" name="last_date" min="<?php echo Date('Y-m-d'); ?>" required />
 										</div>
 									</div>
@@ -124,7 +201,82 @@
 							@for($i=0;$i<count($getReqCuti_OneUser);$i++)
 								
 								  <div class="tab-pane fade show <?php if($i == 0){ echo "active"; } ?>" id="cust_tab_<?php echo $getReqCuti_OneUser[$i]['id_cuti']; ?>" role="tabpanel" aria-labelledby="tab_<?php echo $getReqCuti_OneUser[$i]['id_cuti']; ?>">
-									 <?php echo $getReqCuti_OneUser[$i]['id_cuti']; ?>
+									 <table>
+										<tr>
+											<td>Kategori Cuti</td>
+											<td style="width:1%">:</td>
+											<td>{{$getReqCuti_OneUser[$i]['nama_type_cuti']}}</td>
+										</tr>
+										<tr>
+											<td>Tanggal Request</td>
+											<td style="width:1%">:</td>
+											<td>{{ date('d F Y H:i', strtotime($getReqCuti_OneUser[$i]['requested_date'])) }}</td>
+										</tr>
+										<tr>
+											<td>Tanggal Cuti</td>
+											<td style="width:1%">:</td>
+											<td>
+												{{ date('d F Y', strtotime($getReqCuti_OneUser[$i]['tgl_mulai_cuti'])) }}
+												-
+												{{ date('d F Y', strtotime($getReqCuti_OneUser[$i]['tgl_mulai_cuti'].' +'.($getReqCuti_OneUser[$i]['jumlah_hari_cuti']-1).' days')) }}
+											</td>
+										</tr>
+										<tr>
+											<td>Jumlah Hari Cuti</td>
+											<td style="width:1%">:</td>
+											<td>{{$getReqCuti_OneUser[$i]['jumlah_hari_cuti']}} Hari</td>
+										</tr>
+										<tr>
+											<td>Deskripsi Cuti</td>
+											<td style="width:1%">:</td>
+											<td>{{$getReqCuti_OneUser[$i]['desc_cuti']}}</td>
+										</tr>
+										<tr>
+											<td>Approved By</td>
+											<td style="width:1%">:</td>
+											<td>{{$getReqCuti_OneUser[$i]['hr_nik_approve']}}</td>
+										</tr>
+									 </table>
+									 
+									 <div class="timelines">
+										<ol>
+										  <li class="dotgreen">Requested</li>
+										  <li class="<?php 
+											if($getReqCuti_OneUser[$i]['status'] != 1 && $getReqCuti_OneUser[$i]['status'] != 3){
+												echo "dotyellow";
+											}
+											else{
+												echo "dotgreen";	
+											} 
+											?>">Review-ing</li>
+										  <li class="<?php 
+											if($getReqCuti_OneUser[$i]['status'] == 1){
+												echo "dotgreen";
+											}
+											else if($getReqCuti_OneUser[$i]['status'] == 3){
+												echo "dotred";
+											}
+											else{
+												echo "dotgrey";	
+											} 
+											?>">
+											
+											<?php 
+											if($getReqCuti_OneUser[$i]['status'] == 1){
+												echo "Approved";
+											}
+											else if($getReqCuti_OneUser[$i]['status'] == 3){
+												echo "Rejected";
+											}
+											else{
+												echo "";	
+											} 
+											?>
+											
+											
+											</li>
+										</ol>
+									</div>
 								  </div>
 								
 								

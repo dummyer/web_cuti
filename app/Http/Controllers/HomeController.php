@@ -18,13 +18,7 @@ class HomeController extends Controller
             return redirect('login');
         }else{
 			$getOneUser = $this->getOneUser();
-			if($getOneUser[0]['role'] == 1){ //HR
-				return view('home/home')->with('getOneUser', $getOneUser);
-		
-			}else{
-				abort(404);
-			}
-			
+			return view('home/home')->with('getOneUser', $getOneUser);
 		}
 		
 	}

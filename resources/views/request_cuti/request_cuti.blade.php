@@ -37,7 +37,7 @@
 		</div>
         <div class="row">
           <!-- /.col -->
-          <div class="col-md-12 text-left">
+          <div class="col-md-6 text-left">
             <div class="card">
                
                 <div class="card-body">
@@ -46,7 +46,7 @@
 					<form id="formReqCuti" action="#" enctype='multipart/form-data'>
 					
 					<input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
-						<table class="table table-sm table-borderless" style="width:50%">
+						<table class="table table-sm table-borderless" style="width:100%">
 							<tr>
 								<td>Kategori Cuti</td>
 								<td style="width:1%">:</td>
@@ -98,6 +98,32 @@
 						</table>
 					</form>
                   </div>
+                </div>
+                <!-- /.card-body -->
+              </div>
+            <!-- /.card -->
+          </div><!-- /.col -->
+          <div class="col-md-6 text-left">
+            <div class="card">
+               
+                <div class="card-body">
+                  <!-- the events -->
+                  <ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Home</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Profile</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Contact</button>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">...</div>
+  <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
+  <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+</div>
                 </div>
                 <!-- /.card-body -->
               </div>
@@ -169,13 +195,20 @@ function submitReqCuti(formData){
 				}).then(() => {
 					location.reload();
 				});
+			}else if(isi.responseText == "2"){
+				Swal.fire({
+				  title: "Ukuran file tidak boleh lebih dari 1 MB",
+				  icon: "error",
+				  allowOutsideClick: false,
+				}).then(() => {
+					location.reload();
+				});
 			}
-			
 			else{
 				Swal.fire({
 									  position: 'center',
 									  icon: 'error',
-									  title: 'Update gagal, silakan coba lagi',
+									  title: 'Request gagal, silakan coba lagi',
 										allowOutsideClick: false,
 									});
 			}
@@ -183,7 +216,7 @@ function submitReqCuti(formData){
 							Swal.fire({
 									  position: 'center',
 									  type: 'error',
-									  title: 'Update gagal, silakan coba lagi',
+									  title: 'Request gagal, silakan coba lagi',
 									  showConfirmButton: false,
 									  timer: 1500
 									});

@@ -188,6 +188,50 @@ class CutiController extends Controller
 	}
 	
 	function requestCuti(){
-		return $_FILES;
+		//return $_REQUEST;
+		$allImg = $_FILES['uploadedFile'];
+		$limit = 1 * 1024 * 1024; //1MB.
+		$ext = pathinfo($allImg['name'], PATHINFO_EXTENSION);
+		
+		$lokasi = 'assets/img/pict_chat/'.Session::get('nik_user').'/';
+		//$resultImg = [];
+		$totalHaritmp = strtotime($_POST['last_date']) - strtotime($_POST['first_date'].' -1 days');
+		$totalHari = round($totalHaritmp / (60 * 60 * 24));
+		if($allImg['tmp_name'] != ""){
+			if (!file_exists($lokasi)) {
+				mkdir($lokasi, 0777, true);
+			}
+			if($allImg['size']<= $limit){
+				$newfilename= Session::get('nik_user').'_'.$this->getDatetimeNowName().'.'.$ext;
+
+				if(move_uploaded_file( $allImg['tmp_name'], $lokasi.$newfilename )){
+					$one_user = DB::insert("INSERT INTO `list_cuti` 
+							(`type_cuti`, `desc_cuti`, `attachment`, `tgl_mulai_cuti`, `jumlah_hari_cuti`, `user_cuti`, `requested_date`, `status`, `hr_nik_approve`) VALUES 
+								('".$_POST['type_cuti']."', '".$_POST['desc_cuti']."', '".$lokasi.$newfilename."', '".$_POST['first_date']."', '".$totalHari."', '".Session::get('nik_user')."', '".Date('Y-m-d H:i:s')."', '2', NULL)");
+					$result = json_decode(json_encode($one_user), true);
+					return $result;
+					
+				}
+			}else{
+				return 3;
+			}
+		}else{
+			$one_user = DB::insert("INSERT INTO `list_cuti` 
+							(`type_cuti`, `desc_cuti`, `attachment`, `tgl_mulai_cuti`, `jumlah_hari_cuti`, `user_cuti`, `requested_date`, `status`, `hr_nik_approve`) VALUES 
+								('".$_POST['type_cuti']."', '".$_POST['desc_cuti']."', NULL, '".$_POST['first_date']."', '".$totalHari."', '".Session::get('nik_user')."', '".Date('Y-m-d H:i:s')."', '2', NULL)");
+					$result = json_decode(json_encode($one_user), true);
+					return $result;
+		}
+		
+		
+	}
+	
+	function getDatetimeNowName() {
+		$tz_object = new \DateTimeZone('Asia/Jakarta');
+		//date_default_timezone_set('Brazil/East');
+
+		$datetime = new \DateTime();
+		$datetime->setTimezone($tz_object);
+		return $datetime->format('YmdHis');
 	}
 }

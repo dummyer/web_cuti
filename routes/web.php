@@ -35,4 +35,5 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('/countCutiRequest_pending', [CutiController::class, 'countCutiRequest_pending']);
 	Route::get('/showCalender', [CutiController::class, 'showCalender']);
 	Route::get('/getKategoriCuti', [CutiController::class, 'getKategoriCuti']);
+	Route::get('/getReqCuti_OneUser', [CutiController::class, 'getReqCuti_OneUser']);
 });

@@ -56,7 +56,8 @@ class CutiController extends Controller
 			if($getOneUser[0]['role'] == 1){ //HR
 				$getKategoriCuti = $this->getKategoriCuti();
 				$count_pending_cuti = $this->countCutiRequest_pending();
-				return view('request_cuti/request_cuti')->with('getOneUser', $getOneUser)->with('getKategoriCuti', $getKategoriCuti)->with('count_pending_cuti', $count_pending_cuti);
+				$getReqCuti_OneUser = $this->getReqCuti_OneUser();
+				return view('request_cuti/request_cuti')->with('getOneUser', $getOneUser)->with('getKategoriCuti', $getKategoriCuti)->with('count_pending_cuti', $count_pending_cuti)->with('getReqCuti_OneUser', $getReqCuti_OneUser);
 			}else{
 				abort(404);
 			}
@@ -233,5 +234,11 @@ class CutiController extends Controller
 		$datetime = new \DateTime();
 		$datetime->setTimezone($tz_object);
 		return $datetime->format('YmdHis');
+	}
+	
+	function getReqCuti_OneUser(){
+		$one_user = DB::select("SELECT c.*, t.id_type_cuti FROM list_cuti c INNER JOIN type_cuti t ON t.id_type_cuti = c.type_cuti where c.user_cuti='".Session::get('nik_user')."' order by c.requested_date ASC");
+		$result = json_decode(json_encode($one_user), true);
+		return $result;
 	}
 }

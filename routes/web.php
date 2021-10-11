@@ -27,10 +27,12 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('/permintaan_cuti', [CutiController::class, 'permintaan_cuti']);
 	Route::get('/request_cuti', [CutiController::class, 'request_cuti']);
 	Route::get('/permintaan_cuti/updateCuti', [CutiController::class, 'updateCuti']);
+	Route::post('/request_cuti/requestCuti', [CutiController::class, 'requestCuti']);
 	
 	//show
 	Route::get('/showAll_cutiRequest_pending', [CutiController::class, 'showAll_cutiRequest_pending']);
 	Route::get('/showAll_cutiRequest_approved', [CutiController::class, 'showAll_cutiRequest_approved']);
 	Route::get('/countCutiRequest_pending', [CutiController::class, 'countCutiRequest_pending']);
 	Route::get('/showCalender', [CutiController::class, 'showCalender']);
+	Route::get('/getKategoriCuti', [CutiController::class, 'getKategoriCuti']);
 });

@@ -54,8 +54,9 @@ class CutiController extends Controller
 		else{
 			$getOneUser = $this->getOneUser();
 			if($getOneUser[0]['role'] == 1){ //HR
+				$getKategoriCuti = $this->getKategoriCuti();
 				$count_pending_cuti = $this->countCutiRequest_pending();
-				return view('request_cuti/request_cuti')->with('getOneUser', $getOneUser)->with('count_pending_cuti', $count_pending_cuti);
+				return view('request_cuti/request_cuti')->with('getOneUser', $getOneUser)->with('getKategoriCuti', $getKategoriCuti)->with('count_pending_cuti', $count_pending_cuti);
 			}else{
 				abort(404);
 			}
@@ -94,13 +95,32 @@ class CutiController extends Controller
 	}
 	
 	function updateCuti(){
+		//return $_REQUEST;
+		$all_cuti = DB::select('SELECT * from list_cuti where id_cuti ='.$_GET['id_cuti']);
+		$getOneCuti = json_decode(json_encode($all_cuti), true);
+		$getOneUser = $this->getOneUser();
+		//return $getOneCuti;
 		if(isset($_GET['action']) && $_GET['action'] == "approve"){
-			$all_cuti = DB::update("UPDATE list_cuti SET status = '1' WHERE list_cuti.id_cuti = ".$_GET['id_cuti']);
-			$result = json_decode(json_encode($all_cuti), true);
-			return $result;
+			if(isset($getOneCuti[0]['jumlah_hari_cuti']) && $getOneCuti[0]['jumlah_hari_cuti'] <= $getOneUser[0]['jata_cuti']){
+				$sisa_cuti = $getOneUser[0]['jata_cuti'] - $getOneCuti[0]['jumlah_hari_cuti'];
+				//return $sisa_cuti;
+				$up_jataCuti = DB::update("UPDATE user SET jata_cuti = '".$sisa_cuti."' WHERE nik_user='".$getOneUser[0]['nik_user']."'");
+				$resultUpCuti = json_decode(json_encode($up_jataCuti), true);
+				if($resultUpCuti == 1){
+					$all_cuti = DB::update("UPDATE list_cuti SET status = '1', hr_nik_approve = '".Session::get('nik_user')."' WHERE list_cuti.id_cuti = ".$_GET['id_cuti']);
+					$result = json_decode(json_encode($all_cuti), true);
+					return $result;
+				}else{
+					return $resultUpCuti;
+				}
+				
+			}else{
+				return 3;
+			}
+			
 		}
 		else if(isset($_GET['action']) && $_GET['action'] == "reject"){
-			$all_cuti = DB::update("UPDATE list_cuti SET status = '3' WHERE list_cuti.id_cuti = ".$_GET['id_cuti']);
+			$all_cuti = DB::update("UPDATE list_cuti SET status = '3', hr_nik_approve = '".Session::get('nik_user')."' WHERE list_cuti.id_cuti = ".$_GET['id_cuti']);
 			$result = json_decode(json_encode($all_cuti), true);
 			return $result;
 		}
@@ -133,7 +153,7 @@ class CutiController extends Controller
           borderColor    : '#f56954', //red
           allDay         : true
 		*/
-		//	$json = [];
+		$json = [];
 		for($i=0;$i<count($all_cuti_approved);$i++){
 			
 			$json[$i]['title'] = '[CUTI '.$all_cuti_approved[$i]['nama_type_cuti'].'] '.$all_cuti_approved[$i]['nik_user'];
@@ -155,5 +175,19 @@ class CutiController extends Controller
 		}else{
 			return redirect('login');
 		}
+	}
+	
+	function getKategoriCuti(){
+		$one_user = DB::select("SELECT * FROM type_cuti");
+		$result = json_decode(json_encode($one_user), true);
+		if(count($result) > 0){
+			return $result;
+		}else{
+			return [];
+		}
+	}
+	
+	function requestCuti(){
+		return $_FILES;
 	}
 }

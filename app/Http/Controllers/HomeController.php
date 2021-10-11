@@ -14,8 +14,19 @@ use Illuminate\Support\Facades\DB;
 class HomeController extends Controller
 {
     function index(){
-		$getOneUser = $this->getOneUser();
-		return view('home/home')->with('getOneUser', $getOneUser);
+		if(!Session::get('nik_user')){
+            return redirect('login');
+        }else{
+			$getOneUser = $this->getOneUser();
+			if($getOneUser[0]['role'] == 1){ //HR
+				return view('home/home')->with('getOneUser', $getOneUser);
+		
+			}else{
+				abort(404);
+			}
+			
+		}
+		
 	}
 	function getOneUser(){
 		$one_user = DB::select("SELECT * FROM user where nik_user='".Session::get('nik_user')."'");

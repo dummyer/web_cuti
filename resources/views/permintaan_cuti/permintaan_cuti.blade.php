@@ -185,7 +185,18 @@ function updateCuti(id_cuti, action){
 				}).then(() => {
 					location.reload();
 				});
-			}else{
+			}
+			else if(isi.responseText == "3"){
+				Swal.fire({
+				  title: "Jata cuti tidak mencukupi",
+				  icon: "error",
+				  allowOutsideClick: false,
+				}).then(() => {
+					location.reload();
+				});
+			}
+			
+			else{
 				Swal.fire({
 									  position: 'center',
 									  icon: 'error',

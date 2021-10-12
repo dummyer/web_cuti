@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 11, 2021 at 12:31 PM
+-- Generation Time: Oct 12, 2021 at 10:11 AM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 7.4.20
 
@@ -36,6 +36,7 @@ CREATE TABLE `list_cuti` (
   `jumlah_hari_cuti` int(11) NOT NULL,
   `user_cuti` int(11) NOT NULL,
   `requested_date` datetime NOT NULL,
+  `requested_user` int(11) NOT NULL,
   `status` int(11) NOT NULL,
   `hr_nik_approve` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -44,13 +45,19 @@ CREATE TABLE `list_cuti` (
 -- Dumping data for table `list_cuti`
 --
 
-INSERT INTO `list_cuti` (`id_cuti`, `type_cuti`, `desc_cuti`, `attachment`, `tgl_mulai_cuti`, `jumlah_hari_cuti`, `user_cuti`, `requested_date`, `status`, `hr_nik_approve`) VALUES
-(2, 1, 'Cuti tahunan dari tanggal 10 oktober 2021 hingga 13 oktober 2021', '', '2021-10-11', 4, 1902, '2021-10-01 12:01:05', 1, 1901),
-(3, 2, 'Cuti sakit', '', '2021-10-13', 2, 1903, '2021-10-13 12:01:05', 1, 1901),
-(4, 2, 'cuti sakit', 'assets/img/pict_chat/1901/1901_20211011163600png', '2021-10-11', 3, 1901, '2021-10-11 09:36:00', 3, 1901),
-(5, 2, 'cuti sakit', 'assets/img/pict_chat/1901/1901_20211011163643png', '2021-10-11', 2, 1901, '2021-10-11 09:36:43', 3, 1901),
-(6, 2, 'cuti sakit', 'assets/img/pict_chat/1901/1901_20211011163849.png', '2021-10-11', 2, 1901, '2021-10-11 09:38:49', 3, 1901),
-(7, 2, 'cuti sakit', 'assets/img/pict_chat/1901/1901_20211011163921.png', '2021-10-11', 4, 1901, '2021-10-11 09:39:21', 2, NULL);
+INSERT INTO `list_cuti` (`id_cuti`, `type_cuti`, `desc_cuti`, `attachment`, `tgl_mulai_cuti`, `jumlah_hari_cuti`, `user_cuti`, `requested_date`, `requested_user`, `status`, `hr_nik_approve`) VALUES
+(2, 1, 'Cuti tahunan dari tanggal 10 oktober 2021 hingga 13 oktober 2021', '', '2021-10-11', 4, 1902, '2021-10-01 12:01:05', 1902, 1, 1901),
+(3, 2, 'Cuti sakit', '', '2021-10-13', 2, 1903, '2021-10-13 12:01:05', 1903, 1, 1901),
+(13, 1, 'cuti tahunan', NULL, '2021-10-11', 4, 1901, '2021-10-11 14:25:17', 1901, 2, NULL),
+(14, 1, '', NULL, '2021-10-16', 3, 1902, '2021-10-11 14:32:45', 1902, 1, 1901),
+(15, 1, '', NULL, '2021-10-16', 7, 1902, '2021-10-11 14:34:52', 1902, 2, NULL),
+(16, 1, 'zxc', 'assets/img/pict_chat/1901/1901_20211012080809.png', '2021-10-12', 4, 1901, '2021-10-12 01:08:09', 1901, 2, NULL),
+(17, 6, '', NULL, '2021-10-12', 1, 1901, '2021-10-12 01:35:41', 1901, 2, NULL),
+(18, 5, '', NULL, '2021-10-15', 1, 1901, '2021-10-12 08:36:43', 1901, 2, NULL),
+(19, 4, '', NULL, '2021-10-16', 1, 99999, '2021-10-12 09:25:58', 1901, 1, NULL),
+(20, 4, '', NULL, '2021-10-29', 1, 99999, '2021-10-12 11:45:02', 1901, 1, NULL),
+(21, 5, '', NULL, '2021-09-15', 1, 1901, '2021-09-12 08:36:43', 1901, 2, NULL),
+(22, 5, '', NULL, '2021-09-15', 1, 1901, '2021-09-12 08:36:43', 1901, 1, 1902);
 
 -- --------------------------------------------------------
 
@@ -128,7 +135,8 @@ INSERT INTO `type_cuti` (`id_type_cuti`, `nama_type_cuti`, `desc_type_cuti`) VAL
 (2, 'SAKIT', ''),
 (3, 'MELAHIRKAN', ''),
 (4, 'BERSAMA', ''),
-(5, 'ALASAN KHUSUS', '');
+(5, 'ALASAN KHUSUS', ''),
+(6, 'TERLAMBAT', '');
 
 -- --------------------------------------------------------
 
@@ -162,18 +170,17 @@ CREATE TABLE `user` (
   `department` varchar(45) NOT NULL,
   `role` int(11) NOT NULL,
   `password` varchar(45) NOT NULL,
-  `join_date` date NOT NULL,
-  `jata_cuti` int(11) NOT NULL
+  `join_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id_user`, `nik_user`, `nama_user`, `department`, `role`, `password`, `join_date`, `jata_cuti`) VALUES
-(1, 1901, 'Jejemon', 'HR', 1, 'd54e99a6c03704e95e6965532dec148b', '2021-05-11', 8),
-(2, 1902, 'Rina', 'MARKETING', 2, 'fc4ddc15f9f4b4b06ef7844d6bb53abf', '2021-07-21', 12),
-(3, 1903, 'Bubu', 'INTERNAL AUDIT', 2, '944626adf9e3b76a3919b50dc0b080a4', '2019-05-14', 12);
+INSERT INTO `user` (`id_user`, `nik_user`, `nama_user`, `department`, `role`, `password`, `join_date`) VALUES
+(1, 1901, 'Jejemon', 'HR', 1, 'd54e99a6c03704e95e6965532dec148b', '2021-05-11'),
+(2, 1902, 'Rina', 'MARKETING', 2, 'fc4ddc15f9f4b4b06ef7844d6bb53abf', '2021-07-21'),
+(3, 1903, 'Bubu', 'INTERNAL AUDIT', 2, '944626adf9e3b76a3919b50dc0b080a4', '2019-05-14');
 
 --
 -- Indexes for dumped tables
@@ -229,7 +236,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `list_cuti`
 --
 ALTER TABLE `list_cuti`
-  MODIFY `id_cuti` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_cuti` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `notification`
@@ -253,7 +260,7 @@ ALTER TABLE `status_cuti`
 -- AUTO_INCREMENT for table `type_cuti`
 --
 ALTER TABLE `type_cuti`
-  MODIFY `id_type_cuti` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_type_cuti` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `type_notification`

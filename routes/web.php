@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CutiController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,10 +23,13 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('/logout', [LoginController::class, 'logout']);
 	Route::get('/login/authLogin', [LoginController::class, 'authLogin']);
 	Route::get('/home', [HomeController::class, 'index']);
+	Route::get('/profile', [UserController::class, 'index']);
+	Route::post('/profile/editPassword', [UserController::class, 'editPassword']);
 	
 	Route::get('/kalender_cuti', [CutiController::class, 'kalender_cuti']);
 	Route::get('/permintaan_cuti', [CutiController::class, 'permintaan_cuti']);
 	Route::get('/request_cuti', [CutiController::class, 'request_cuti']);
+	Route::get('/info_cuti', [CutiController::class, 'info_cuti']);
 	Route::get('/create_cuti_hr', [CutiController::class, 'create_cuti_hr']);
 	Route::post('/create_cuti_hr/createCuti', [CutiController::class, 'createCuti']);
 	Route::get('/permintaan_cuti/updateCuti', [CutiController::class, 'updateCuti']);
@@ -38,4 +42,6 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('/showCalender', [CutiController::class, 'showCalender']);
 	Route::get('/getKategoriCuti', [CutiController::class, 'getKategoriCuti']);
 	Route::get('/getReqCuti_OneUser', [CutiController::class, 'getReqCuti_OneUser']);
+	Route::get('/getOneUser_cuti6BulanTerakhir', [CutiController::class, 'getOneUser_cuti6BulanTerakhir']);
+	Route::get('/getDetailCuti6BulanTerakhir', [CutiController::class, 'getDetailCuti6BulanTerakhir']);
 });

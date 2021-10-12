@@ -11,6 +11,7 @@
     <ul class="navbar-nav ml-auto">
 
       <!-- Notifications Dropdown Menu -->
+	  <!--
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
           <i class="far fa-bell"></i>
@@ -37,7 +38,7 @@
           <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
         </div>
       </li>
-    
+		-->
       <!-- Profile Dropdown Menu -->
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
@@ -46,8 +47,8 @@
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
           <span class="dropdown-item dropdown-header">Hello, <?php echo $getOneUser[0]['nama_user']; ?></span>
           <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-user mr-2"></i> Edit Profile
+          <a href="<?php echo url('/')?>/profile" class="dropdown-item">
+            <i class="fas fa-user mr-2"></i> Profile
             <!--<span class="float-right text-muted text-sm">3 mins</span>-->
           </a>
           <div class="dropdown-divider"></div>

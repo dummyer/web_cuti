@@ -56,6 +56,15 @@
 			@endif
         <li class="nav-header">User</li>
 			  <li class="nav-item">
+				<a href="<?php echo url('/'); ?>/info_cuti" class="nav-link <?php if(Request::segment(1) == 'info_cuti'){ echo "active"; } ?>">
+				  <i class="nav-icon fas fa-info-circle"></i>
+				  <p>
+					Info Cuti
+				   
+				  </p>
+				</a>
+			  </li>
+			  <li class="nav-item">
 				<a href="<?php echo url('/'); ?>/request_cuti" class="nav-link <?php if(Request::segment(1) == 'request_cuti'){ echo "active"; } ?>">
 				  <i class="nav-icon fas fa-pencil-alt"></i>
 				  <p>

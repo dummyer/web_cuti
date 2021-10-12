@@ -203,7 +203,7 @@ function updateCuti(id_cuti, action){
 			
 			else if(isi.responseText == "4"){
 				Swal.fire({
-				  title: "Anda tidak dapat memproses data cuti NIK sendiri",
+				  title: "Anda tidak dapat memproses data cuti request dari NIK sendiri",
 				  icon: "error",
 				  allowOutsideClick: false,
 				});

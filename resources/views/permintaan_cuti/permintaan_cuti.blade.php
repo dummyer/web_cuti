@@ -62,10 +62,10 @@
 										<td>{{ $all_cuti_pending[$i]['nama_user'].'/'.$all_cuti_pending[$i]['nik_user'] }}</td>
 										<td>{{ $all_cuti_pending[$i]['department']}}</td>
 										<td>{{ $all_cuti_pending[$i]['nama_type_cuti']}}</td>
-										<td><a href="#" onclick="actionListCuti('view_desc', '<?php echo $all_cuti_pending[$i]['desc_cuti']; ?>')">{{ $all_cuti_pending[$i]['tgl_mulai_cuti']}} ({{ $all_cuti_pending[$i]['jumlah_hari_cuti']}} Hari)</a></td>
+										<td><a href="#" onclick="actionListCuti('view_desc', '<?php echo $all_cuti_pending[$i]['desc_cuti']; ?>', '<?php echo $all_cuti_pending[$i]['attachment']; ?>', '<?php echo $all_cuti_pending[$i]['requested_user']; ?>')">{{ $all_cuti_pending[$i]['tgl_mulai_cuti']}} ({{ $all_cuti_pending[$i]['jumlah_hari_cuti']}} Hari)</a></td>
 										<td class="text-center">
-											<button class="btn btn-danger btn-sm" onclick="actionListCuti('reject', '<?php echo $all_cuti_pending[$i]['id_cuti']; ?>')">Reject</button>
-											<button class="btn btn-success btn-sm" onclick="actionListCuti('approve', '<?php echo $all_cuti_pending[$i]['id_cuti']; ?>')">Approve</button>
+											<button class="btn btn-danger btn-sm" onclick="actionListCuti('reject', '<?php echo $all_cuti_pending[$i]['id_cuti']; ?>', '<?php echo $all_cuti_pending[$i]['attachment']; ?>', '<?php echo $all_cuti_pending[$i]['requested_user']; ?>')">Reject</button>
+											<button class="btn btn-success btn-sm" onclick="actionListCuti('approve', '<?php echo $all_cuti_pending[$i]['id_cuti']; ?>', '<?php echo $all_cuti_pending[$i]['attachment']; ?>', '<?php echo $all_cuti_pending[$i]['requested_user']; ?>')">Approve</button>
 										</td>
 									</tr>
 								@endfor
@@ -110,10 +110,15 @@ $(document).ready(function(){
     "ordering": false
 	});
 });
-function actionListCuti(action, data_cuti){
+function actionListCuti(action, data_cuti, attachment, requested_user){
 	if(action == 'view_desc'){
+		var donlot = "";
+		if(attachment != ""){
+			donlot = "<br>Attachment :"+"<a target='_blank' class='btn btn-link' href='<?php echo url('/'); ?>/"+attachment+"'>View</a>";
+		}
 		Swal.fire({
-		  text: data_cuti,
+		  //text: data_cuti,
+		  html: "Deskripsi Cuti : "+data_cuti+"<br>Request Oleh : "+requested_user+donlot,
 		  allowOutsideClick: false,
 		});
 	}else if(action == 'reject'){

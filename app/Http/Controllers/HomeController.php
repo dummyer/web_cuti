@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Routing\UrlGenerator;
 use Illuminate\Support\Facades\DB;
+date_default_timezone_set("Asia/Jakarta");
 
 class HomeController extends Controller
 {

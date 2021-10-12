@@ -27,6 +27,7 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('/permintaan_cuti', [CutiController::class, 'permintaan_cuti']);
 	Route::get('/request_cuti', [CutiController::class, 'request_cuti']);
 	Route::get('/create_cuti_hr', [CutiController::class, 'create_cuti_hr']);
+	Route::post('/create_cuti_hr/createCuti', [CutiController::class, 'createCuti']);
 	Route::get('/permintaan_cuti/updateCuti', [CutiController::class, 'updateCuti']);
 	Route::post('/request_cuti/requestCuti', [CutiController::class, 'requestCuti']);
 	

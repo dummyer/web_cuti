@@ -315,7 +315,7 @@ $('#formReqCuti').submit(function (e) {
 	e.preventDefault();
 	Swal.fire({
 		  title: 'Are you sure?',
-		  text: "Request cuti yang dipilih akan disetujui!",
+		  text: "Request cuti yang dipilih akan disubmit!",
 		  icon: 'warning',
 		  showCancelButton: true,
 		  confirmButtonColor: '#3085d6',

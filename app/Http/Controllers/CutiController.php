@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Routing\UrlGenerator;
 use Illuminate\Support\Facades\DB;
+date_default_timezone_set("Asia/Jakarta");
 
 class CutiController extends Controller
 {
@@ -69,8 +70,10 @@ class CutiController extends Controller
 			$getOneUser = $this->getOneUser();
 			if($getOneUser[0]['role'] == 1){ //HR
 				$all_cuti_pending = $this->showAll_cutiRequest_pending();
+				$getKategoriCuti = $this->getKategoriCuti();
 				$count_pending_cuti = $this->countCutiRequest_pending();
-				return view('permintaan_cuti/permintaan_cuti')->with('all_cuti_pending', $all_cuti_pending)->with('getOneUser', $getOneUser)->with('count_pending_cuti', $count_pending_cuti);
+				$getAllUser = $this->getAllUser();
+				return view('create_cuti/create_cuti')->with('getOneUser', $getOneUser)->with('getKategoriCuti', $getKategoriCuti)->with('getAllUser', $getAllUser);
 			}else{
 				abort(404);
 			}
@@ -78,8 +81,8 @@ class CutiController extends Controller
 	}
 	
 	function showAll_cutiRequest_pending(){
-		$all_cuti = DB::select('SELECT c.id_cuti, c.type_cuti, t.nama_type_cuti, c.desc_cuti, c.tgl_mulai_cuti, c.jumlah_hari_cuti, ue.nama_user, ue.nik_user, ue.department, c.requested_date, s.judul_status, c.hr_nik_approve FROM list_cuti c 
-									INNER JOIN user ue ON c.user_cuti=ue.nik_user 
+		$all_cuti = DB::select('SELECT c.id_cuti, c.attachment, c.type_cuti, c.requested_user, t.nama_type_cuti, c.desc_cuti, c.tgl_mulai_cuti, c.jumlah_hari_cuti, ue.nama_user, ue.nik_user, ue.department, c.requested_date, s.judul_status, c.hr_nik_approve FROM list_cuti c 
+									INNER JOIN user ue ON c.user_cuti=ue.nik_user
 									INNER JOIN status_cuti s ON s.id_status_cuti=c.status
 									INNER JOIN type_cuti t ON t.id_type_cuti=c.type_cuti 
 									
@@ -115,7 +118,7 @@ class CutiController extends Controller
 		$getOneUser = $this->getOneUser();
 		$all_cuti = DB::select('SELECT * from list_cuti where id_cuti ='.$_GET['id_cuti']);
 		$getOneCuti = json_decode(json_encode($all_cuti), true);
-		if(count($getOneCuti) > 0 && $getOneCuti[0]['user_cuti'] != Session::get('nik_user')){
+		if(count($getOneCuti) > 0 && $getOneCuti[0]['requested_user'] != Session::get('nik_user')){
 			if(isset($_GET['action']) && $_GET['action'] == "approve"){
 				$get_cuti_this_month = DB::select("SELECT user_cuti, sum(jumlah_hari_cuti) as total_cuti from list_cuti where MONTH(tgl_mulai_cuti) = MONTH(CURRENT_DATE())
 													AND YEAR(tgl_mulai_cuti) = YEAR(CURRENT_DATE()) AND status = 1 AND user_cuti='".$getOneCuti[0]['user_cuti']."' GROUP BY user_cuti");
@@ -141,6 +144,12 @@ class CutiController extends Controller
 			return 4;
 		}
 		
+	}
+	
+	function getAllUser(){
+		$all_cuti = DB::select("SELECT * FROM user");
+		$result = json_decode(json_encode($all_cuti), true);
+		return $result;
 	}
 	
 	function statusCutiColor($status){
@@ -220,8 +229,8 @@ class CutiController extends Controller
 
 				if(move_uploaded_file( $allImg['tmp_name'], $lokasi.$newfilename )){
 					$one_user = DB::insert("INSERT INTO `list_cuti` 
-							(`type_cuti`, `desc_cuti`, `attachment`, `tgl_mulai_cuti`, `jumlah_hari_cuti`, `user_cuti`, `requested_date`, `status`, `hr_nik_approve`) VALUES 
-								('".$_POST['type_cuti']."', '".$_POST['desc_cuti']."', '".$lokasi.$newfilename."', '".$_POST['first_date']."', '".$totalHari."', '".Session::get('nik_user')."', '".Date('Y-m-d H:i:s')."', '2', NULL)");
+							(`type_cuti`, `desc_cuti`, `attachment`, `tgl_mulai_cuti`, `jumlah_hari_cuti`, `user_cuti`, `requested_date`, `requested_user`, `status`, `hr_nik_approve`) VALUES 
+								('".$_POST['type_cuti']."', '".$_POST['desc_cuti']."', '".$lokasi.$newfilename."', '".$_POST['first_date']."', '".$totalHari."', '".Session::get('nik_user')."', '".Date('Y-m-d H:i:s')."', '".Session::get('nik_user')."', '2', NULL)");
 					$result = json_decode(json_encode($one_user), true);
 					return $result;
 					
@@ -231,8 +240,47 @@ class CutiController extends Controller
 			}
 		}else{
 			$one_user = DB::insert("INSERT INTO `list_cuti` 
-							(`type_cuti`, `desc_cuti`, `attachment`, `tgl_mulai_cuti`, `jumlah_hari_cuti`, `user_cuti`, `requested_date`, `status`, `hr_nik_approve`) VALUES 
-								('".$_POST['type_cuti']."', '".$_POST['desc_cuti']."', NULL, '".$_POST['first_date']."', '".$totalHari."', '".Session::get('nik_user')."', '".Date('Y-m-d H:i:s')."', '2', NULL)");
+							(`type_cuti`, `desc_cuti`, `attachment`, `tgl_mulai_cuti`, `jumlah_hari_cuti`, `user_cuti`, `requested_date`, `requested_user`, `status`, `hr_nik_approve`) VALUES 
+								('".$_POST['type_cuti']."', '".$_POST['desc_cuti']."', NULL, '".$_POST['first_date']."', '".$totalHari."', '".Session::get('nik_user')."', '".Date('Y-m-d H:i:s')."', '".Session::get('nik_user')."', '2', NULL)");
+					$result = json_decode(json_encode($one_user), true);
+					return $result;
+		}
+		
+		
+	}
+	
+	function createCuti(){
+		//return $_REQUEST;
+		$allImg = $_FILES['uploadedFile'];
+		$limit = 1 * 1024 * 1024; //1MB.
+		$ext = pathinfo($allImg['name'], PATHINFO_EXTENSION);
+		
+		$lokasi = 'assets/img/pict_chat/'.Session::get('nik_user').'/';
+		//$resultImg = [];
+		$totalHaritmp = strtotime($_POST['last_date']) - strtotime($_POST['first_date'].' -1 days');
+		$totalHari = round($totalHaritmp / (60 * 60 * 24));
+		if($allImg['tmp_name'] != ""){
+			if (!file_exists($lokasi)) {
+				mkdir($lokasi, 0777, true);
+			}
+			if($allImg['size']<= $limit){
+				$newfilename= Session::get('nik_user').'_'.$this->getDatetimeNowName().'.'.$ext;
+
+				if(move_uploaded_file( $allImg['tmp_name'], $lokasi.$newfilename )){
+					$one_user = DB::insert("INSERT INTO `list_cuti` 
+							(`type_cuti`, `desc_cuti`, `attachment`, `tgl_mulai_cuti`, `jumlah_hari_cuti`, `user_cuti`, `requested_date`, `requested_user`, `status`, `hr_nik_approve`) VALUES 
+								('".$_POST['type_cuti']."', '".$_POST['desc_cuti']."', '".$lokasi.$newfilename."', '".$_POST['first_date']."', '".$totalHari."', '".$_POST['user_cuti']."', '".Date('Y-m-d H:i:s')."', '".Session::get('nik_user')."', '2', NULL)");
+					$result = json_decode(json_encode($one_user), true);
+					return $result;
+					
+				}
+			}else{
+				return 3;
+			}
+		}else{
+			$one_user = DB::insert("INSERT INTO `list_cuti` 
+							(`type_cuti`, `desc_cuti`, `attachment`, `tgl_mulai_cuti`, `jumlah_hari_cuti`, `user_cuti`, `requested_date`, `requested_user`, `status`, `hr_nik_approve`) VALUES 
+								('".$_POST['type_cuti']."', '".$_POST['desc_cuti']."', NULL, '".$_POST['first_date']."', '".$totalHari."', '".$_POST['user_cuti']."', '".Date('Y-m-d H:i:s')."', '".Session::get('nik_user')."', '2', NULL)");
 					$result = json_decode(json_encode($one_user), true);
 					return $result;
 		}

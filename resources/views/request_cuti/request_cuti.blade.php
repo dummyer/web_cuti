@@ -365,6 +365,12 @@ function submitReqCuti(formData){
 				}).then(() => {
 					location.reload();
 				});
+			}else if(isi.responseText == "4"){
+				Swal.fire({
+				  title: "End date tidak boleh kurang dari start date",
+				  icon: "error",
+				  allowOutsideClick: false,
+				});
 			}
 			else{
 				Swal.fire({
